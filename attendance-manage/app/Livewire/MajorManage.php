@@ -18,6 +18,8 @@ class MajorManage extends Component
     public MajorForm $form;
 
     public string $title = 'Majors';
+
+    public string $titleModal = '';
     public bool $editMode = false;
 //    modal object
     public bool $majorModal = false;

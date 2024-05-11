@@ -16,7 +16,7 @@
     </x-card>
 
     {{--    Classes Modal--}}
-    <x-modal wire:model="classModal" title="Add a Class" separator>
+    <x-modal wire:model="classModal" title="Class information" separator>
         <x-form wire:submit="save">
             <x-select
                 label="School year"

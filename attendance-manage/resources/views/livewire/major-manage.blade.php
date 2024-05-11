@@ -16,7 +16,7 @@
     </x-card>
 
 {{--    Major Modal--}}
-    <x-modal wire:model="majorModal" title="Add a Major" separator>
+    <x-modal wire:model="majorModal" title="Major information" separator>
         <x-form wire:submit="save">
             <x-input label="Major name" wire:model="form.name" />
             <x-slot:actions>

@@ -16,7 +16,7 @@
     </x-card>
 
     {{--    School_year Modal--}}
-    <x-modal wire:model="schoolYearModal" title="Add a School year" separator>
+    <x-modal wire:model="schoolYearModal" title="School year information" separator>
         <x-form wire:submit="save">
             <x-input label="School year name" wire:model="form.name" />
             <x-input label="Start year" wire:model="form.start_year" />

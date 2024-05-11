@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             MajorSeeder::class,
             SchoolYearSeeder::class,
             ClassStudentSeeder::class,
+            SubjectSeeder::class,
         ]);
     }
 }
