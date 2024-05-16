@@ -17,7 +17,9 @@ class SchoolYearFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name,
+            'start_year' => $this->faker->randomDigit(),
+            'end_year' => $this->faker->randomDigit(),
         ];
     }
 }

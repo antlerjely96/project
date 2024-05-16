@@ -13,7 +13,10 @@ class SchoolYearForm extends Form
     #[Validate('required')]
     public $name;
 
-    #[Validate('required', 'integer')]
+    #[Validate([
+        'required',
+        'integer'
+    ])]
     public $start_year;
     public $end_year;
 

@@ -27,9 +27,9 @@
         <x-menu-item title="Major Management" icon="o-sparkles" link="{{ route('admin.majors') }}"></x-menu-item>
         <x-menu-item title="School year Management" icon="o-bookmark-square" link="{{ route('admin.school-years') }}"></x-menu-item>
         <x-menu-item title="Class Management" icon="o-users" link="{{ route('admin.classes') }}"></x-menu-item>
-{{--        <x-menu-item title="Student Management" icon="o-user-minus" link="{{ route('students') }}"></x-menu-item>--}}
-{{--        <x-menu-item title="Subject Management" icon="o-book-open" link="{{ route('subjects') }}"></x-menu-item>--}}
-{{--        <x-menu-item title="Instructor Management" icon="o-pencil" link="{{ route('instructors') }}"></x-menu-item>--}}
+        <x-menu-item title="Student Management" icon="o-user-minus" link="{{ route('admin.students') }}"></x-menu-item>
+        <x-menu-item title="Subject Management" icon="o-book-open" link="{{ route('admin.subjects') }}"></x-menu-item>
+        <x-menu-item title="Instructor Management" icon="o-pencil" link="{{ route('admin.instructors') }}"></x-menu-item>
 {{--        <x-menu-item title="Division Management" icon="o-calendar-days" link="{{ route('divisions') }}"></x-menu-item>--}}
 {{--        <x-menu-item title="Attendance Management" icon="o-document-text" link="{{ route('attendances') }}"></x-menu-item>--}}
 {{--        <x-menu-item title="Personal Management" icon="o-user" link=""></x-menu-item>--}}

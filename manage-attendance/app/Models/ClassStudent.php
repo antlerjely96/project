@@ -22,4 +22,9 @@ class ClassStudent extends Model
     {
         return $this->belongsTo(SchoolYear::class);
     }
+
+    public function students(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Student::class);
+    }
 }

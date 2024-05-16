@@ -13,9 +13,14 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->foreignId('major_id')->constrained('majors');
-            $table->foreignId('school_year_id')->constrained('school_years');
+            $table->string('code', 10)->unique();
+            $table->string('name');
+            $table->string('phone', 15);
+            $table->text('address')->nullable();
+            $table->string('gender', 10);
+            $table->date('date_of_birth');
+            $table->foreignId('class_student_id')->constrained('class_students');
+            $table->foreignId('account_id')->constrained('accounts');
             $table->softDeletes();
             $table->timestamps();
         });

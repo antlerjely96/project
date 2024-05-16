@@ -19,4 +19,7 @@ Route::prefix('/Admin')->group(function (){
     Route::get('/majors', \App\Livewire\Admin\MajorManage::class)->name('admin.majors');
     Route::get('/school-years', \App\Livewire\Admin\SchoolYearManage::class)->name('admin.school-years');
     Route::get('/classes', \App\Livewire\Admin\ClassStudentManage::class)->name('admin.classes');
+    Route::get('/students', \App\Livewire\Admin\StudentManage::class)->name('admin.students');
+    Route::get('/subjects', \App\Livewire\Admin\SubjectManage::class)->name('admin.subjects');
+    Route::get('/instructors', \App\Livewire\Admin\InstructorManage::class)->name('admin.instructors');
 });

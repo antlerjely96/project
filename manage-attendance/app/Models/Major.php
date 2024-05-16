@@ -17,4 +17,14 @@ class Major extends Model
     {
         return $this->hasMany(ClassStudent::class);
     }
+
+    public function subjects(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->hasMany(Subject::class);
+    }
+
+    public function instructors(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Instructor::class);
+    }
 }

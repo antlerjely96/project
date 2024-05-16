@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone', 15);
             $table->foreignId('account_id')->constrained('accounts');
+            $table->foreignId('major_id')->constrained('majors');
             $table->softDeletes();
             $table->timestamps();
         });
