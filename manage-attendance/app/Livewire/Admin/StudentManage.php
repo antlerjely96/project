@@ -41,6 +41,8 @@ class StudentManage extends Component
     public $selectedMajor = null;
     public $selectedSchoolYear = null;
 
+    public bool $editStudentModal = false;
+
     public function students(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         return Student::with('classStudent', 'account')
@@ -49,12 +51,18 @@ class StudentManage extends Component
             ->paginate(6);
     }
 
+    public function allClasses(): \Illuminate\Database\Eloquent\Collection
+    {
+        return ClassStudent::all();
+    }
+
     public function render(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
         return view('livewire.admin.student-manage', [
             'students' => $this->students(),
             'majors' => $this->majors(),
             'schoolYears' => $this->schoolYears(),
+            'classes' => $this->allClasses(),
         ]);
     }
 
@@ -101,12 +109,13 @@ class StudentManage extends Component
     {
         if($this->editMode){
             $this->form->update();
+            $this->editStudentModal = false;
             $this->success('Student updated successfully');
         } else {
             $this->form->store();
+            $this->studentModal = false;
             $this->success('Student created successfully');
         }
-        $this->studentModal = false;
         $this->form->reset();
     }
 
@@ -115,7 +124,7 @@ class StudentManage extends Component
         $student = Student::find($id);
         $this->form->setStudent($student);
         $this->editMode = true;
-        $this->studentModal = true;
+        $this->editStudentModal = true;
     }
 
     public function delete($id): void

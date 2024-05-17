@@ -42,9 +42,7 @@
                 placeholder="Select class"
                 placeholder-value="0"
             />
-            @if($this->editMode == false)
-                <x-input label="Student code" wire:model="form.code" />
-            @endif
+            <x-input label="Student code" wire:model="form.code" />
             <x-input label="Student name" wire:model="form.name" />
             <x-input label="Phone" wire:model="form.phone"/>
             <x-input label="Address" wire:model="form.address" />
@@ -55,13 +53,39 @@
                 ]
             " />
             <x-datetime label="Birthday" wire:model="form.date_of_birth" icon="o-calendar" />
-            @if($this->editMode == false)
-                <x-input label="Email" wire:model="form.email" type="email"/>
-            @endif
+            <x-input label="Email" wire:model="form.email" type="email"/>
             {{--            <x-input label="Password" wire:model="form.password" type="password"/>--}}
             {{--            <x-input label="Duration" wire:model="form.duration" />--}}
             <x-slot:actions>
                 <x-button label="Cancel" @click="$wire.studentModal = false"/>
+                <x-button label="Save" class="btn-primary" type="submit" spinner="save" />
+            </x-slot:actions>
+        </x-form>
+    </x-modal>
+
+    <x-modal wire:model="editStudentModal" title="Student information" separator>
+        <x-form wire:submit="save">
+            <x-select
+                label="Class"
+                wire:model="form.class_student_id"
+                :options="$classes"
+                placeholder="Select class"
+                placeholder-value="0"
+            />
+            <x-input label="Student name" wire:model="form.name" />
+            <x-input label="Phone" wire:model="form.phone"/>
+            <x-input label="Address" wire:model="form.address" />
+            <x-radio label="Gender" wire:model="form.gender" :options="
+                [
+                    ['id' => 'Male', 'name' => 'Male'],
+                    ['id' => 'Female', 'name' => 'Female'],
+                ]
+            " />
+            <x-datetime label="Birthday" wire:model="form.date_of_birth" icon="o-calendar" />
+            {{--            <x-input label="Password" wire:model="form.password" type="password"/>--}}
+            {{--            <x-input label="Duration" wire:model="form.duration" />--}}
+            <x-slot:actions>
+                <x-button label="Cancel" @click="$wire.editStudentModal = false"/>
                 <x-button label="Save" class="btn-primary" type="submit" spinner="save" />
             </x-slot:actions>
         </x-form>

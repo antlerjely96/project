@@ -30,8 +30,9 @@
         <x-menu-item title="Student Management" icon="o-user-minus" link="{{ route('admin.students') }}"></x-menu-item>
         <x-menu-item title="Subject Management" icon="o-book-open" link="{{ route('admin.subjects') }}"></x-menu-item>
         <x-menu-item title="Instructor Management" icon="o-pencil" link="{{ route('admin.instructors') }}"></x-menu-item>
-{{--        <x-menu-item title="Division Management" icon="o-calendar-days" link="{{ route('divisions') }}"></x-menu-item>--}}
+        <x-menu-item title="Division Management" icon="o-calendar-days" link="{{ route('admin.divisions') }}"></x-menu-item>
 {{--        <x-menu-item title="Attendance Management" icon="o-document-text" link="{{ route('attendances') }}"></x-menu-item>--}}
 {{--        <x-menu-item title="Personal Management" icon="o-user" link=""></x-menu-item>--}}
+        <x-menu-item title="Sign out" icon="o-phone-x-mark" link="{{ route('logout') }}"></x-menu-item>
     </x-menu>
 </x-slot:sidebar>
