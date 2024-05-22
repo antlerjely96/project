@@ -14,6 +14,7 @@ class AccountManage extends Component
     use Toast;
     use Authenticatable;
     public AccountForm $form;
+    public bool $loading = false;
 
     public function render()
     {

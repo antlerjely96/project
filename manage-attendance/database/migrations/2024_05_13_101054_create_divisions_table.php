@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('divisions', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('class_student_id')->constrained('class_students');
             $table->foreignId('admin_id')->constrained('admins');
             $table->foreignId('subject_id')->constrained('subjects');
             $table->foreignId('instructor_id')->constrained('instructors');
-            $table->primary(['class_student_id', 'subject_id', 'instructor_id']);
+            $table->date('start_date')->nullable();
+            $table->string('status');
             $table->softDeletes();
             $table->timestamps();
         });

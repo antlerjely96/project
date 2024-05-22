@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone', 15);
-            $table->integer('gender')->nullable();
+            $table->string('gender', 10)->nullable();
             $table->foreignId('account_id')->constrained('accounts');
             $table->softDeletes();
             $table->timestamps();

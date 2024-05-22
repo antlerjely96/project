@@ -22,12 +22,14 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             AccountSeeder::class,
+            AdminSeeder::class,
             MajorSeeder::class,
             SchoolYearSeeder::class,
             ClassStudentSeeder::class,
             SubjectSeeder::class,
             StudentSeeder::class,
             InstructorSeeder::class,
+            DivisionSeeder::class,
         ]);
     }
 }
