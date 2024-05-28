@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
             $table->date('attendance_date');
+            $table->time('start_time');
+            $table->time('end_time');
             $table->foreignId('class_student_id')->constrained('class_students');
             $table->foreignId('subject_id')->constrained('subjects');
             $table->foreignId('account_id')->constrained('accounts');

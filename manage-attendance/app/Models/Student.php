@@ -31,4 +31,9 @@ class Student extends Model
     {
         return $this->belongsTo(Account::class);
     }
+
+    public function attendanceDetails(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(AttendanceDetail::class);
+    }
 }

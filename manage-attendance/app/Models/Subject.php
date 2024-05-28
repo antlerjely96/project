@@ -17,4 +17,9 @@ class Subject extends Model
     {
         return $this->belongsTo(Major::class);
     }
+
+    public function attendances(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
 }

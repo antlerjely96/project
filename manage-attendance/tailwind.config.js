@@ -12,7 +12,11 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php'
     ],
     theme: {
-        extend: {},
+        extend: {
+            maxWidth: {
+                '10': '10vw',
+            },
+        },
     },
 
     // Add daisyUI

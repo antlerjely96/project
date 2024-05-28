@@ -34,7 +34,7 @@
                 @scope('actions', $division)
                 <x-button icon="o-pencil" wire:click="edit({{ $division->id }})" spinner class="btn-ghost btn-sm text-green-500"/>
                 <x-button icon="o-eye" wire:click="viewDetail({{ $division->id }})" spinner class="btn-ghost btn-sm text-green-500"/>
-                @if($division->status == 'Open')
+                @if($division->status == 'Active')
                     <x-button icon="s-stop-circle" wire:click="changeStatus({{ $division->id }})" spinner class="btn-ghost btn-sm text-red-500"/>
                 @else
                     <x-button icon="m-play-circle" wire:click="changeStatus({{ $division->id }})" spinner class="btn-ghost btn-sm text-red-500"/>

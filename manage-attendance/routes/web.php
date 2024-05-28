@@ -25,4 +25,5 @@ Route::middleware('login')->prefix('/Admin')->group(function (){
     Route::get('/instructors', \App\Livewire\Admin\InstructorManage::class)->name('admin.instructors');
     Route::get('/divisions', \App\Livewire\Admin\DivisionManage::class)->name('admin.divisions');
     Route::get('/attendances', \App\Livewire\Admin\AttendanceManage::class)->name('admin.attendances');
+    Route::get('/attendance-details/{class_student_id}/{subject_id}/{instructor_id}', \App\Livewire\Admin\AttendanceDetailManage::class)->name('admin.attendance-details');
 });

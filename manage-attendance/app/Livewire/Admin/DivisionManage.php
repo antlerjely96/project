@@ -147,7 +147,7 @@ class DivisionManage extends Component
                 'subject_id' => $this->selectedSubject,
                 'instructor_id' => $this->selectedInstructor,
                 'start_date' => $this->form->start_date,
-                'status' => 'Open',
+                'status' => 'Active',
             ]);
 
             $division_id = Division::where('class_student_id', $this->selectedClass)
@@ -161,9 +161,6 @@ class DivisionManage extends Component
             while($count < ceil($duration / $this->form->time_day)){
                 foreach ($this->form->start_time as $key => $value){
                     if($startDate->dayOfWeekIso == $key){
-//                        dd($key);
-//                        dd($startDate->dayName);
-//                        dd($value);
                         DivisionDetails::create([
                             'division_id' => $division_id,
                             'day_of_week' => $startDate->dayName,
@@ -196,12 +193,12 @@ class DivisionManage extends Component
 
     public function changeStatus($id): void
     {
-        if(Division::find($id)->status == 'Open'){
-            Division::where('id', $id)->update(['status' => 'Close']);
-            $this->success('Closed division');
+        if(Division::find($id)->status == 'Active'){
+            Division::where('id', $id)->update(['status' => 'Inactive']);
+            $this->success('Inactive division');
         } else {
-            Division::where('id', $id)->update(['status' => 'Open']);
-            $this->success('Opened division');
+            Division::where('id', $id)->update(['status' => 'Active']);
+            $this->success('Active division');
         }
     }
 
