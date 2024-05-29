@@ -3,6 +3,7 @@
     @include('livewire.header')
 
     <x-button label="+" @click="$wire.showModal()" class="btn-primary"/>
+    <x-button label="+ Add by excel" @click="$wire.showModalExcel()" class="btn-primary"/>
 
     <x-card>
         <x-table :headers="$headers" :rows="$students" :sort-by="$sortBy" with-pagination>
@@ -87,6 +88,18 @@
             <x-slot:actions>
                 <x-button label="Cancel" @click="$wire.editStudentModal = false"/>
                 <x-button label="Save" class="btn-primary" type="submit" spinner="save" />
+            </x-slot:actions>
+        </x-form>
+    </x-modal>
+
+    <x-modal wire:model="studentExcelModal" title="Add by Excel">
+{{--        <x-button label="Download template" @click="window.location.href = '{{ route('student.download-template') }}'" class="btn-primary"/>--}}
+        Note: Please download the template below, fill in the information to upload and do not change file's name.
+        <x-button label="Download template" class="btn-primary" @click="$wire.downloadTemplate()"/>
+        <x-form wire:submit="uploadExcel" enctype="multipart/form-data">
+            <x-file wire:model="form.file" label="Choose file" accept=".xlsx"/>
+            <x-slot:actions>
+                <x-button label="Save" class="btn-primary" type="submit" spinner="uploadExcel" />
             </x-slot:actions>
         </x-form>
     </x-modal>

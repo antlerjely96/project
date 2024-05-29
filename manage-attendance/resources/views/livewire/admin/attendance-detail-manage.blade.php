@@ -117,14 +117,14 @@
                                 <input type="radio" wire:model="form.status.{{$student->id}}" class="radio radio-primary w-4 h-4" value="absences_with_permission"/>
                             </td>
                             <td>
-                                <x-input lable="Note" wire:model="form.note"/>
+                                <x-input lable="Note" wire:model="form.note.{{$student->id}}"/>
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
                 <x-slot:actions>
-{{--                    <x-button label="Cancel" @click="$wire.studentModal = false"/>--}}
+                    <x-button label="Cancel" @click="$wire.modalAddAttendance = false"/>
                     <x-button label="Save" class="btn-primary" type="submit" spinner="save" />
                 </x-slot:actions>
             </x-form>
@@ -149,7 +149,7 @@
         </x-card>
         <x-card>
             <x-form wire:submit="save">
-                <x-datetime label="Date" wire:model="form.attendance_date" max="{{ \Carbon\Carbon::now()->toDateString() }}"/>
+                <x-datetime label="Date" wire:model="form.attendance_date" max="{{ \Carbon\Carbon::now()->toDateString() }}" readonly/>
                 <x-select
                     label="Start time"
                     wire:model="form.start_time"

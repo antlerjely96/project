@@ -250,7 +250,7 @@ class AttendanceManage extends Component
 
     public function edit($id): void
     {
-        $attendance = Attendance::find($id);
+        $attendance = Attendance::with('attendanceDetails')->find($id);
         $this->form->setAttendance($attendance);
         $this->modalEditAttendance = true;
     }

@@ -15,13 +15,17 @@ class AttendanceForm extends Form
     public $end_time;
 
     public array $status = [];
-    public $note;
+    public array $note = [];
 
-    public function setAttendance(Attendance $attendance): void
+    public function setAttendance(Attendance $attendance)
     {
         $this->attendance = $attendance;
         $this->attendance_date = $attendance->attendance_date;
         $this->start_time = $attendance->start_time;
         $this->end_time = $attendance->end_time;
+        foreach($attendance->attendanceDetails as $key => $attendanceDetail) {
+            $this->status[$attendanceDetail->student_id] = $attendanceDetail->status;
+            $this->note[$attendanceDetail->student_id] = $attendanceDetail->note;
+        }
     }
 }

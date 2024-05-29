@@ -2,19 +2,24 @@
 
 namespace App\Livewire\Admin;
 
+use App\Imports\StudentImport;
 use App\Livewire\Forms\Admin\StudentForm;
 use App\Models\ClassStudent;
 use App\Models\Major;
 use App\Models\SchoolYear;
 use App\Models\Student;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 use Mary\Traits\Toast;
 use Livewire\Attributes\Computed;
 
 class StudentManage extends Component
 {
     use WithPagination;
+    use WithFileUploads;
     use Toast;
     public string $title = 'Students';
     public array $sortBy = [
@@ -35,6 +40,7 @@ class StudentManage extends Component
     public string $search = '';
     public bool $drawer = false;
     public bool $studentModal = false;
+    public bool $studentExcelModal = false;
     public bool $editMode = false;
     public StudentForm $form;
 //    public $classes = [];
@@ -159,5 +165,33 @@ class StudentManage extends Component
             'locked' => '0',
         ]);
         $this->success('Unlocked Account');
+    }
+
+    public function showModalExcel(): void
+    {
+        $this->studentExcelModal = true;
+        $this->form->reset();
+    }
+
+    public function downloadTemplate(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+//        return Storage::download("public/templates/student.xlsx", "add-student-template.xlsx");
+        return response()->download(public_path('storage/templates/student.xlsx'), "add-student-template.xlsx");
+    }
+
+    public function uploadExcel(): void
+    {
+        if ($this->form->file == null) {
+            $this->error('Please select file');
+            return;
+        } else {
+            $this->validate([
+                'form.file' => 'mimes:xlsx,xls',
+            ]);
+            $path = $this->form->file->store('temp');
+            Excel::import(new StudentImport, $path);
+            $this->studentExcelModal = false;
+            $this->success('Students imported successfully');
+        }
     }
 }

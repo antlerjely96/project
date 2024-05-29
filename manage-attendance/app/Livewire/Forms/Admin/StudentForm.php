@@ -61,6 +61,7 @@ class StudentForm extends Form
 //    #[Validate('required', 'numeric')]
     public $account_id;
 
+    public $file;
     public function setStudent(Student $student): void
     {
         $this->student = $student;
