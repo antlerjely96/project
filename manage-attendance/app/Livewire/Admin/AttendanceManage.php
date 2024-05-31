@@ -24,21 +24,19 @@ class AttendanceManage extends Component
     public string $title = 'Attendances';
     public string $search = '';
     public $selectedClass = null;
-
     public $selectedDivision = null;
-
     public $selectedStatus = null;
-
     public bool $viewDetail = false;
     public $class_student_id;
     public $subject_id;
     public $instructor_id;
     public $selectedTab = 'statistics-tab';
-
     public bool $modalAddAttendance = false;
     public bool $modalEditAttendance = false;
-
+    public bool $modalEditStatus = false;
     public AttendanceForm $form;
+    public $attendance_date;
+    public $student_id;
 
     public array $headerDivision = [
         ['key' => 'classStudent.name', 'label' => 'Class', 'class' => 'text-black'],
@@ -67,7 +65,8 @@ class AttendanceManage extends Component
                 'subjectDurations' => $this->getSubjectDuration($this->class_student_id, $this->subject_id, $this->instructor_id),
                 'instructorAndStatus' => $this->getInstructorAndStatus($this->class_student_id, $this->subject_id, $this->instructor_id),
                 'countLessons' => $this->getCountLesson($this->class_student_id, $this->subject_id),
-                'students' => $this->getStudent($this->class_student_id)
+                'students' => $this->getStudent($this->class_student_id),
+                'attendanceStatusDetails' => $this->getAttendanceStatus()
             ]);
         }
     }
@@ -132,7 +131,7 @@ class AttendanceManage extends Component
             ->selectRaw("COUNT(CASE WHEN attendance_details.attendance_status = 'absences_without_permission' THEN 1 ELSE NULL END) AS total_absences_without_permission")
             ->selectRaw("COUNT(CASE WHEN attendance_details.attendance_status = 'late' THEN 1 ELSE NULL END) AS total_late")
             ->selectRaw("COUNT(CASE WHEN attendance_details.attendance_status = 'absences_with_permission' THEN 1 ELSE NULL END) AS total_absences_with_permission")
-            ->selectRaw("ROUND((((COUNT(CASE WHEN attendance_details.attendance_status = 'attended' THEN 1 ELSE NULL END) + COUNT(CASE WHEN attendance_details.attendance_status = 'late' THEN 1 ELSE NULL END) / 3) / COUNT(attendance_details.attendance_id)) * 100), 2) AS attendance_rate")
+            ->selectRaw("ROUND((((COUNT(CASE WHEN attendance_details.attendance_status = 'attended' THEN 1 ELSE NULL END) + COUNT(CASE WHEN attendance_details.attendance_status = 'late' THEN 1 ELSE NULL END) / 3 + + COUNT(CASE WHEN attendance_details.attendance_status = 'late' THEN 1 ELSE NULL END) / 3) / COUNT(attendance_details.attendance_id)) * 100), 2) AS attendance_rate")
             ->get();
     }
 
@@ -184,6 +183,29 @@ class AttendanceManage extends Component
         return Student::where('class_student_id', $class_student_id)->get();
     }
 
+    public function getAttendanceStatus(): \Illuminate\Database\Eloquent\Collection|array
+    {
+        $data = array();
+        $attendances = Attendance::join('attendance_details', 'attendances.id', '=', 'attendance_details.attendance_id')
+            ->where('class_student_id', $this->class_student_id)
+            ->where('subject_id', $this->subject_id)
+            ->select([
+                'attendances.attendance_date',
+                'attendances.start_time',
+                'attendances.end_time',
+                'attendance_details.student_id',
+                'attendance_details.attendance_status'
+            ])
+            ->get();
+        foreach ($attendances as $attendance){
+            $data[$attendance->student_id][$attendance->attendance_date] = [
+                'attendance_status' => $attendance->attendance_status
+            ];
+        }
+
+        return $data;
+    }
+
     public function showModal(): void
     {
         $this->form->reset();
@@ -233,7 +255,7 @@ class AttendanceManage extends Component
                             'attendance_id' => $attendanceId,
                             'student_id' => $student_id,
                             'attendance_status' => $status,
-                            'note' => $this->form->note,
+                            'note' => $this->form->note[$student_id] ?? "",
                         ]);
                     }
                 }
@@ -248,10 +270,35 @@ class AttendanceManage extends Component
         }
     }
 
-    public function edit($id): void
+    public function editStatus($attendance_date, $student_id): void
     {
-        $attendance = Attendance::with('attendanceDetails')->find($id);
-        $this->form->setAttendance($attendance);
-        $this->modalEditAttendance = true;
+        $this->attendance_date = $attendance_date;
+        $this->student_id = $student_id;
+        $this->modalEditStatus = true;
     }
+
+    public function updateStatus(): void
+    {
+        if($this->form->status[$this->student_id]){
+            AttendanceDetail::join('attendances', 'attendance_details.attendance_id', '=', 'attendances.id')
+                ->where('attendances.attendance_date', $this->attendance_date)
+                ->where('attendance_details.student_id', $this->student_id)
+                ->update([
+                    'attendance_details.attendance_status' => $this->form->status[$this->student_id]
+                ]);
+            $this->success("This attendance has been updated successfully.");
+            $this->modalEditStatus = false;
+        }
+        else {
+            $this->error("Please fill the status of student.");
+        }
+    }
+
+//    public function edit($id): void
+//    {
+//        $attendance = Attendance::with('attendanceDetails')->find($id);
+//        $this->form->setAttendance($attendance);
+//        $this->modalEditAttendance = true;
+//    }
+
 }
