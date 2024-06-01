@@ -1,6 +1,6 @@
 <!-- HEADER -->
 <x-header :title="$title ?? 'Home page'" separator progress-indicator size="text-2xl">
-    @if($title != 'Divisions' && $title != 'Attendances')
+    @if($title != 'Divisions' && $title != 'Attendances' && $title != 'Personal Information')
         <x-slot:middle class="!justify-end">
             <x-input placeholder="Search..." wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
         </x-slot:middle>

@@ -25,5 +25,11 @@ Route::middleware('login')->prefix('/Admin')->group(function (){
     Route::get('/instructors', \App\Livewire\Admin\InstructorManage::class)->name('admin.instructors');
     Route::get('/divisions', \App\Livewire\Admin\DivisionManage::class)->name('admin.divisions');
     Route::get('/attendances', \App\Livewire\Admin\AttendanceManage::class)->name('admin.attendances');
-    Route::get('/attendance-details/{class_student_id}/{subject_id}/{instructor_id}', \App\Livewire\Admin\AttendanceDetailManage::class)->name('admin.attendance-details');
+    Route::get('/admins', \App\Livewire\Admin\AdminManage::class)->name('admin.admins');
+//    Route::get('/attendance-details/{class_student_id}/{subject_id}/{instructor_id}', \App\Livewire\Admin\AttendanceDetailManage::class)->name('admin.attendance-details');
+});
+
+Route::middleware('login')->prefix('/Instructor')->group(function(){
+    Route::get('/attendances', \App\Livewire\Instructor\AttendanceManage::class)->name('instructor.attendances');
+    Route::get('/instructors', \App\Livewire\Instructor\InstructorManage::class)->name('instructor.instructors');
 });

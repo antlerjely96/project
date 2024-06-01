@@ -31,52 +31,52 @@
             <x-tab name="overview-tab" label="Overview" icon="o-sun" class="overflow-auto">
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th>Student code</th>
-                            <th>Student name</th>
-                            @foreach($countLessons as $countLesson)
-                                <th>
-                                    {{$countLesson->attendance_date}} <br>
-                                    {{$countLesson->start_time}} - {{$countLesson->end_time}}
-                                </th>
-                            @endforeach
-                        </tr>
+                    <tr>
+                        <th>Student code</th>
+                        <th>Student name</th>
+                        @foreach($countLessons as $countLesson)
+                            <th>
+                                {{$countLesson->attendance_date}} <br>
+                                {{$countLesson->start_time}} - {{$countLesson->end_time}}
+                            </th>
+                        @endforeach
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach($students as $student)
-                            <tr>
-                                <td>
-                                    {{ $student->code }}
-                                </td>
-                                <td>
-                                    {{ $student->name }}
-                                </td>
-                                @foreach($attendanceStatusDetails as $student_id => $attendanceStatusDetail)
-{{--                                    {{ dd($attendanceStatusDetail) }}--}}
-                                    @if($student->id == $student_id)
-                                        @foreach($countLessons as $countLesson)
-                                            @if(isset($attendanceStatusDetail[$countLesson->attendance_date]))
-                                                <td @click="$wire.editStatus('{{$countLesson->attendance_date}}', {{$student_id}})" class="hover:bg-amber-200">
-                                                    @if($attendanceStatusDetail[$countLesson->attendance_date]['attendance_status'] == 'attended')
-                                                        <span> - </span>
-                                                    @elseif($attendanceStatusDetail[$countLesson->attendance_date]['attendance_status'] == 'absences_without_permission')
-                                                        <span> N </span>
-                                                    @elseif($attendanceStatusDetail[$countLesson->attendance_date]['attendance_status'] == 'late')
-                                                        <span> L </span>
-                                                    @elseif($attendanceStatusDetail[$countLesson->attendance_date]['attendance_status'] == 'absences_with_permission')
-                                                        <span> P </span>
-                                                    @endif
-                                                </td>
-                                            @else
-                                                <td>
-                                                    CN
-                                                </td>
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                @endforeach
-                            </tr>
-                        @endforeach
+                    @foreach($students as $student)
+                        <tr>
+                            <td>
+                                {{ $student->code }}
+                            </td>
+                            <td>
+                                {{ $student->name }}
+                            </td>
+                            @foreach($attendanceStatusDetails as $student_id => $attendanceStatusDetail)
+                                {{--                                    {{ dd($attendanceStatusDetail) }}--}}
+                                @if($student->id == $student_id)
+                                    @foreach($countLessons as $countLesson)
+                                        @if(isset($attendanceStatusDetail[$countLesson->attendance_date]))
+                                            <td @click="$wire.editStatus('{{$countLesson->attendance_date}}', {{$student_id}})" class="hover:bg-amber-200">
+                                                @if($attendanceStatusDetail[$countLesson->attendance_date]['attendance_status'] == 'attended')
+                                                    <span> - </span>
+                                                @elseif($attendanceStatusDetail[$countLesson->attendance_date]['attendance_status'] == 'absences_without_permission')
+                                                    <span> N </span>
+                                                @elseif($attendanceStatusDetail[$countLesson->attendance_date]['attendance_status'] == 'late')
+                                                    <span> L </span>
+                                                @elseif($attendanceStatusDetail[$countLesson->attendance_date]['attendance_status'] == 'absences_with_permission')
+                                                    <span> P </span>
+                                                @endif
+                                            </td>
+                                        @else
+                                            <td>
+                                                CN
+                                            </td>
+                                        @endif
+                                    @endforeach
+                                @endif
+                            @endforeach
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </x-tab>
@@ -87,21 +87,21 @@
         <x-card>
             <table class="table">
                 <thead>
-                    <tr>
-                        <th colspan="4">Note:</th>
-                    </tr>
-                    <tr>
-                        <td> -: Attended </td>
-                        <td> N: Absences without permission </td>
-                        <td> L: Late </td>
-                        <td> P: Absences with permission </td>
-                    </tr>
+                <tr>
+                    <th colspan="4">Note:</th>
+                </tr>
+                <tr>
+                    <td> -: Attended </td>
+                    <td> N: Absences without permission </td>
+                    <td> L: Late </td>
+                    <td> P: Absences with permission </td>
+                </tr>
                 </thead>
             </table>
         </x-card>
         <x-card>
             <x-form wire:submit="save">
-                <x-datetime label="Date" wire:model="form.attendance_date" max="{{ \Carbon\Carbon::now()->toDateString() }}"/>
+                <x-input label="Date" wire:model="form.attendance_date" placeholder="{{ \Carbon\Carbon::now()->toDateString() }}" readonly/>
                 <x-select
                     label="Start time"
                     wire:model="form.start_time"
@@ -134,15 +134,15 @@
                 />
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th> - </th>
-                            <th> N </th>
-                            <th> L </th>
-                            <th> P </th>
-                            <th>Note</th>
-                        </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th> - </th>
+                        <th> N </th>
+                        <th> L </th>
+                        <th> P </th>
+                        <th>Note</th>
+                    </tr>
                     </thead>
                     <tbody>
                     @foreach($students as $student)
@@ -250,7 +250,7 @@
 @push('js')
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#attendance-menu").addClass("mary-active-menu bg-base-300");
+            $("#attendance-menu-instructor").addClass("mary-active-menu bg-base-300");
         });
     </script>
 @endpush

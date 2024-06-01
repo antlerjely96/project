@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Livewire\Forms\Admin;
+namespace App\Livewire\Forms\Instructor;
 
 use App\Models\Attendance;
-use Illuminate\Support\Collection;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 

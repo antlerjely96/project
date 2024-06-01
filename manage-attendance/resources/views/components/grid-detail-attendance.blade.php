@@ -1,7 +1,7 @@
 <x-card>
     <div class="grid grid-cols-3 gap-4" >
         @foreach($items as $item)
-            <div class="bg-gray-100 p-4 rounded-2xl hover:bg-amber-100">
+            <div class="bg-gray-100 p-4 rounded-2xl hover:bg-amber-100" @click="$wire.edit( {{$item->id}} )">
 {{--            <div class="bg-gray-100 p-4 rounded-2xl hover:bg-amber-100" @click="$wire.edit( {{$item->id}} )">--}}
                 <table class="table text-1xl border-0">
                     <tbody>

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\Instructor;
 
-use App\Livewire\Forms\Admin\AttendanceDetailForm;
-use App\Livewire\Forms\Admin\AttendanceForm;
+use App\Livewire\Forms\Instructor\AttendanceForm;
 use App\Models\Attendance;
 use App\Models\AttendanceDetail;
 use App\Models\ClassStudent;
@@ -22,28 +21,20 @@ class AttendanceManage extends Component
 {
     use Toast;
     public string $title = 'Attendances';
-    public string $search = '';
     public $selectedClass = null;
-    public $selectedDivision = null;
     public $selectedStatus = null;
+    public $selectedDivision = null;
     public bool $viewDetail = false;
     public $class_student_id;
     public $subject_id;
     public $instructor_id;
+    public $student_id;
     public $selectedTab = 'statistics-tab';
+    public AttendanceForm $form;
     public bool $modalAddAttendance = false;
     public bool $modalEditAttendance = false;
-    public bool $modalEditStatus = false;
-    public AttendanceForm $form;
     public $attendance_date;
-    public $student_id;
-
-    public array $headerDivision = [
-        ['key' => 'classStudent.name', 'label' => 'Class', 'class' => 'text-black'],
-        ['key' => 'subject.name', 'label' => 'Subject', 'class' => 'text-black'],
-        ['key' => 'instructor.name', 'label' => 'Instructor', 'class' => 'text-black'],
-        ['key' => 'status', 'label' => 'Status', 'class' => 'text-black']
-    ];
+    public bool $modalEditStatus = false;
 
     public array $headersAttendanceDetail = [
         ['key' => 'code', 'label' => 'Student code', 'class' => 'text-black'],
@@ -58,9 +49,9 @@ class AttendanceManage extends Component
     public function render(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
     {
         if($this->viewDetail == false){
-            return view('livewire.admin.attendance-manage');
+            return view('livewire.instructor.attendance-manage');
         } else {
-            return view('livewire.admin.attendance-detail-manage', [
+            return view('livewire.instructor.attendance-detail-manage', [
                 'attendanceDetails' => $this->attendanceDetail($this->class_student_id, $this->subject_id, $this->instructor_id),
                 'subjectDurations' => $this->getSubjectDuration($this->class_student_id, $this->subject_id, $this->instructor_id),
                 'instructorAndStatus' => $this->getInstructorAndStatus($this->class_student_id, $this->subject_id, $this->instructor_id),
@@ -80,13 +71,16 @@ class AttendanceManage extends Component
     #[Computed]
     public function divisions(): \Illuminate\Database\Eloquent\Collection
     {
+        $instructor_id = Instructor::where('account_id', Auth::guard('login')->user()->id)->first()->id;
+//        dd($instructor_id);
         if($this->selectedClass != null){
             if($this->selectedStatus == null){
                 return Division::with('classStudent', 'subject', 'instructor')
                     ->whereHas('classStudent', function ($query) {
                         $query->where('name', 'LIKE', '%' . $this->selectedClass . '%');
                     })
-                    ->where('status', 'Active')
+                    ->where('divisions.status', 'Active')
+                    ->where('divisions.instructor_id', $instructor_id)
                     ->get();
             } else {
                 return Division::with('classStudent', 'subject', 'instructor')
@@ -94,6 +88,7 @@ class AttendanceManage extends Component
                         $query->where('name', 'LIKE', '%' . $this->selectedClass . '%');
                     })
                     ->where('status', $this->selectedStatus)
+                    ->where('divisions.instructor_id', $instructor_id)
                     ->get();
             }
 
@@ -101,10 +96,12 @@ class AttendanceManage extends Component
             if($this->selectedStatus == null){
                 return Division::with('classStudent', 'subject', 'instructor')
                     ->where('status', 'Active')
+                    ->where('divisions.instructor_id', $instructor_id)
                     ->get();
             } else {
                 return Division::with('classStudent', 'subject', 'instructor')
                     ->where('status', $this->selectedStatus)
+                    ->where('divisions.instructor_id', $instructor_id)
                     ->get();
             }
         }
@@ -217,12 +214,11 @@ class AttendanceManage extends Component
         $temp = 0;
         $countAttendance = \App\Models\Attendance::where('class_student_id', $this->class_student_id)
             ->where('subject_id', $this->subject_id)
-            ->where('attendance_date', $this->form->attendance_date)
+            ->where('attendance_date', date('Y-m-d'))
             ->count();
 //        dd($countAttendance);
         if($countAttendance != 1){
             $this->form->validate([
-                'attendance_date' => 'required',
                 'start_time' => 'required',
                 'end_time' => 'required',
             ]);
@@ -236,7 +232,7 @@ class AttendanceManage extends Component
                     $this->error("Please fill all the status of students.");
                 } else {
                     Attendance::create([
-                        'attendance_date' => $this->form->attendance_date,
+                        'attendance_date' => date('Y-m-d'),
                         'start_time' => $this->form->start_time,
                         'end_time' => $this->form->end_time,
                         'class_student_id' => $this->class_student_id,
@@ -244,7 +240,7 @@ class AttendanceManage extends Component
                         'account_id' => Auth::guard('login')->user()->id,
                     ]);
 
-                    $attendanceId = Attendance::where('attendance_date', $this->form->attendance_date)
+                    $attendanceId = Attendance::where('attendance_date', date('Y-m-d'))
                         ->where('class_student_id', $this->class_student_id)
                         ->where('subject_id', $this->subject_id)
                         ->first()
@@ -270,6 +266,22 @@ class AttendanceManage extends Component
         }
     }
 
+    public function edit($id): void
+    {
+        $attendance = Attendance::find($id);
+        $this->form->setAttendance($attendance);
+        $this->modalEditAttendance = true;
+    }
+
+    public function update(): void
+    {
+        if(Carbon::createFromFormat('H:i:s', $this->form->start_time) < Carbon::createFromFormat('H:i:s', $this->form->end_time)){
+            $this->form->update();
+            $this->modalEditAttendance = false;
+            $this->success('Updated Attendance');
+        }
+    }
+
     public function editStatus($attendance_date, $student_id): void
     {
         $this->attendance_date = $attendance_date;
@@ -291,22 +303,6 @@ class AttendanceManage extends Component
         }
         else {
             $this->error("Please fill the status of student.");
-        }
-    }
-
-    public function edit($id): void
-    {
-        $attendance = Attendance::find($id);
-        $this->form->setAttendance($attendance);
-        $this->modalEditAttendance = true;
-    }
-
-    public function update(): void
-    {
-        if(Carbon::createFromFormat('H:i:s', $this->form->start_time) < Carbon::createFromFormat('H:i:s', $this->form->end_time)){
-            $this->form->update();
-            $this->modalEditAttendance = false;
-            $this->success('Updated Attendance');
         }
     }
 }

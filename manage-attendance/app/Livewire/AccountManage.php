@@ -31,7 +31,11 @@ class AccountManage extends Component
             $user = Auth::guard('login')->user();
             Auth::guard('login')->login($user);
             session()->put('user', $user);
-            return redirect()->route('admin.majors');
+            if($user->role == '1'){
+                return Redirect::route('admin.attendances');
+            } elseif ($user->role == '2'){
+                return Redirect::route('instructor.attendances');
+            }
         } else {
             $this->error('Invalid email or password');
         }

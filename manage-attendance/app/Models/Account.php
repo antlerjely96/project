@@ -29,4 +29,9 @@ class Account extends Model implements \Illuminate\Contracts\Auth\Authenticatabl
     {
         return $this->hasMany(Attendance::class);
     }
+
+    public function admin(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Admin::class);
+    }
 }
