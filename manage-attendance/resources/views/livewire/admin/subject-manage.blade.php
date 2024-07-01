@@ -17,14 +17,14 @@
     <x-modal wire:model="subjectModal" title="Subject information" separator>
         <x-form wire:submit="save">
             <x-select
-                label="Major"
+                label="Major (do not choose a major if it is a general subject)"
                 wire:model="form.major_id"
                 :options="$majors"
                 placeholder="Select Major"
                 placeholder-value="0"
             />
             <x-input label="Subject name" wire:model="form.name" />
-            <x-input label="Duration" wire:model="form.duration" />
+            <x-input label="Duration (h)" wire:model="form.duration" />
             <x-slot:actions>
                 <x-button label="Cancel" @click="$wire.subjectModal = false"/>
                 <x-button label="Save" class="btn-primary" type="submit" spinner="save" />

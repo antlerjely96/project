@@ -9,6 +9,7 @@ use App\Models\ClassStudent;
 use App\Models\Division;
 use App\Models\Instructor;
 use App\Models\Student;
+use App\Models\Subject;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +58,8 @@ class AttendanceManage extends Component
                 'instructorAndStatus' => $this->getInstructorAndStatus($this->class_student_id, $this->subject_id, $this->instructor_id),
                 'countLessons' => $this->getCountLesson($this->class_student_id, $this->subject_id),
                 'students' => $this->getStudent($this->class_student_id),
-                'attendanceStatusDetails' => $this->getAttendanceStatus()
+                'attendanceStatusDetails' => $this->getAttendanceStatus(),
+                'classes' => $this->getClass()
             ]);
         }
     }
@@ -134,7 +136,7 @@ class AttendanceManage extends Component
 
     public function getSubjectDuration($class_student_id, $subject_id, $instructor_id): \Illuminate\Database\Eloquent\Collection
     {
-        return Attendance::select([
+        $data = Attendance::select([
                 'attendances.subject_id',
                 'attendances.class_student_id',
                 'subjects.name AS subject_name',
@@ -149,6 +151,13 @@ class AttendanceManage extends Component
             ->where('attendances.subject_id', $this->subject_id)
             ->groupBy('attendances.subject_id', 'attendances.class_student_id', 'subjects.name', 'class_students.name', 'subjects.duration')
             ->get();
+        if($data->count() == 0){
+            return Subject::where('id', $this->subject_id)->get();
+//            return ClassStudent::where('id', $this->class_student_id)->get();
+//            return $arrayData;
+        } else {
+            return $data;
+        }
     }
 
     public function getInstructorAndStatus($class_student_id, $subject_id, $instructor_id): \Illuminate\Database\Eloquent\Collection
@@ -158,9 +167,9 @@ class AttendanceManage extends Component
                 'divisions.status'
             ])
             ->join('divisions', 'divisions.instructor_id', '=', 'instructors.id')
-            ->where('divisions.instructor_id', 2)
-            ->where('divisions.class_student_id', 8)
-            ->where('divisions.subject_id', 2)
+            ->where('divisions.instructor_id', $instructor_id)
+            ->where('divisions.class_student_id', $class_student_id)
+            ->where('divisions.subject_id', $subject_id)
             ->get();
     }
 
@@ -304,5 +313,9 @@ class AttendanceManage extends Component
         else {
             $this->error("Please fill the status of student.");
         }
+    }
+
+    public function getClass(){
+        return ClassStudent::where('id', $this->class_student_id)->get();
     }
 }

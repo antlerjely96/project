@@ -8,7 +8,13 @@
         <x-table :headers="$headers" :rows="$instructors" :sortBy="$sortBy" with-pagination>
             @scope('actions', $instructor)
                 <x-button icon="o-pencil" wire:click="edit({{ $instructor->id }})" spinner class="btn-ghost btn-sm text-green-500"/>
-{{--            <x-button icon="o-trash" wire:click="delete({{ $instructor['id'] }})" spinner class="btn-ghost btn-sm text-red-500" />--}}
+                <x-button icon="o-finger-print" wire:click="resetPassword({{ $instructor->id }})" spinner class="btn-ghost btn-sm text-green-500"/>
+                @if($instructor->account->locked == 0)
+                    <x-button icon="o-lock-closed" wire:click="lockedAccount({{ $instructor->id }})" spinner class="btn-ghost btn-sm text-red-500" />
+                @else
+                    <x-button icon="o-lock-open" wire:click="unlockedAccount({{ $instructor->id }})" spinner class="btn-ghost btn-sm text-red-500" />
+                @endif
+                <x-button icon="o-trash" wire:click="delete({{ $instructor['id'] }})" spinner class="btn-ghost btn-sm text-red-500" />
             @endscope
         </x-table>
     </x-card>

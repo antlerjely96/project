@@ -4,15 +4,15 @@
     <x-card>
         <table class="table">
             <tr>
-                <td>Class: {{ $subjectDurations[0]->class_name }}</td>
-                <td>Status: {{ $instructorAndStatus[0]->status }}</td>
-                <td>Subject: {{ $subjectDurations[0]->subject_name }} </td>
-                <td>Instructor: {{ $instructorAndStatus[0]->name }}</td>
+                <td>Class: {{ $subjectDurations[0]->class_name ?? $classes[0]->name }}</td>
+                <td>Status: {{ $instructorAndStatus[0]->status ?? ''  }}</td>
+                <td>Subject: {{ $subjectDurations[0]->subject_name ?? $subjectDurations[0]->name  }} </td>
+                <td>Instructor: {{ $instructorAndStatus[0]->name ?? ''  }}</td>
             </tr>
             <tr>
-                <td>Duration: {{ $subjectDurations[0]->duration }}</td>
-                <td>Time Learned: {{ $subjectDurations[0]->total_time }} h</td>
-                <td>Remaining duration: {{ $subjectDurations[0]->remaining_duration }} h </td>
+                <td>Duration: {{ $subjectDurations[0]->duration ?? ''  }}</td>
+                <td>Time Learned: {{ $subjectDurations[0]->total_time ?? '0'  }} h</td>
+                <td>Remaining duration: {{ $subjectDurations[0]->remaining_duration ?? $subjectDurations[0]->duration  }} h </td>
                 <td></td>
             </tr>
         </table>
@@ -25,7 +25,9 @@
                 <x-table :headers="$headersAttendanceDetail" :rows="$attendanceDetails" />
             </x-tab>
             <x-tab name="attendances-tab" label="Attendances" icon="o-sparkles">
-                <x-button label="+ Add attendance" @click="$wire.showModal()" class="btn-primary"/>
+                @if($instructorAndStatus[0]->status == 'Active')
+                    <x-button label="+ Add attendance" @click="$wire.showModal()" class="btn-primary"/>
+                @endif
                 <x-grid-detail-attendance :items="$countLessons" />
             </x-tab>
             <x-tab name="overview-tab" label="Overview" icon="o-sun" class="overflow-auto">

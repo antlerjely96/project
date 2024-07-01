@@ -13,7 +13,6 @@ class SubjectForm extends Form
     #[Validate('required')]
     public $name;
 
-    #[Validate('required')]
     public $major_id;
 
     #[Validate([

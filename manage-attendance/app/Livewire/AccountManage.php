@@ -29,12 +29,16 @@ class AccountManage extends Component
         ];
         if(Auth::guard('login')->attempt($account)){
             $user = Auth::guard('login')->user();
-            Auth::guard('login')->login($user);
-            session()->put('user', $user);
-            if($user->role == '1'){
-                return Redirect::route('admin.attendances');
-            } elseif ($user->role == '2'){
-                return Redirect::route('instructor.attendances');
+            if($user->locked == 0){
+                Auth::guard('login')->login($user);
+                session()->put('user', $user);
+                if($user->role == '1'){
+                    return Redirect::route('admin.attendances');
+                } elseif ($user->role == '2'){
+                    return Redirect::route('instructor.attendances');
+                }
+            } else {
+                $this->error('Your account has been locked');
             }
         } else {
             $this->error('Invalid email or password');

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->integer('duration');
-            $table->foreignId('major_id')->constrained('majors');
+            $table->foreignId('major_id')->constrained('majors')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -107,8 +107,12 @@ class DivisionManage extends Component
 
     #[Computed]
     public function instructors(){
-        return Instructor::where('major_id', $this->selectedMajor)
-                            ->get();
+        if($this->selectedMajor){
+            return Instructor::where('major_id', $this->selectedMajor)
+                ->get();
+        } else {
+            return Instructor::all();
+        }
     }
 
     public function render(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application

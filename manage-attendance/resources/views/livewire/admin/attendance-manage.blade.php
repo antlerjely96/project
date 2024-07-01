@@ -4,7 +4,7 @@
 
     <x-card>
         <x-form>
-            <x-input label="Class" wire:model.live="selectedClass" />
+            <x-input label="Class" wire:model.live="selectedClass" placeholder="Input class name to search"/>
 {{--            <x-input label="Status" wire:model="" />--}}
             <x-select
                 label="Status"

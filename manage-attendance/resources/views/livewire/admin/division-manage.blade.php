@@ -3,7 +3,7 @@
     <x-card>
         <x-form>
             <x-select
-                label="Select major"
+                label="Select major (do not choose a major if it is a general subject)"
                 wire:model.live="selectedMajor"
                 :options="$majors"
                 placeholder="Select Major"

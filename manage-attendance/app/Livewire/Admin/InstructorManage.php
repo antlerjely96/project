@@ -39,7 +39,8 @@ class InstructorManage extends Component
             ->paginate(6);
     }
 
-    public function majors(){
+    public function majors(): \Illuminate\Database\Eloquent\Collection
+    {
         return Major::all();
     }
 
@@ -76,5 +77,33 @@ class InstructorManage extends Component
         $this->form->setInstructor($instructor);
         $this->editMode = true;
         $this->instructorModal = true;
+    }
+
+    public function delete($id): void
+    {
+        $instructor = Instructor::find($id);
+        $instructor->delete();
+        $this->success('Instructor deleted successfully', position: 'toast-top');
+    }
+
+    public function lockedAccount($id): void
+    {
+        $instructor = Instructor::find($id);
+        $instructor->account->update(['locked' => '1']);
+        $this->success('Account locked successfully', position: 'toast-top');
+    }
+
+    public function unlockedAccount($id): void
+    {
+        $instructor = Instructor::find($id);
+        $instructor->account->update(['locked' => '0']);
+        $this->success('Account unlocked successfully', position: 'toast-top');
+    }
+
+    public function resetPassword($id): void
+    {
+        $instructor = Instructor::find($id);
+        $instructor->account->update(['password' => bcrypt('123456')]);
+        $this->success('Password reset successfully', position: 'toast-top');
     }
 }

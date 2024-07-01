@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attendance_details', function (Blueprint $table) {
             $table->foreignId('attendance_id')->constrained('attendances');
             $table->foreignId('student_id')->constrained('students');
-            $table->integer('attendance_status');
+            $table->string('attendance_status');
             $table->string('note')->nullable();
             $table->primary(['attendance_id', 'student_id']);
             $table->softDeletes();

@@ -60,10 +60,11 @@ class SubjectManage extends Component
     {
         if ($this->editMode) {
             $this->form->update();
+            $this->editMode = false;
             $this->success('Subject updated successfully');
         } else {
             $this->form->store();
-            $this->success('subject created successfully');
+            $this->success('Subject created successfully');
         }
         $this->subjectModal = false;
     }
